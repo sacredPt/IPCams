@@ -4,6 +4,7 @@ import { cameraAction, createCamera, deleteCamera, fetchRecordings, deleteRecord
 import HlsPlayer from './components/HlsPlayer';
 
 const socket = io();
+const socket = io('http://localhost:4000');
 const empty = { name: '', ip: '', username: '', password: '', rtsp_url: '' };
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
 
   useEffect(() => { fetchRecordings().then(setRecordings); }, [cameras.length]);
   const hls = useMemo(() => (id) => `/hls/camera_${id}/index.m3u8`, []);
+  const hls = useMemo(() => (id) => `http://localhost:4000/hls/camera_${id}/index.m3u8`, []);
 
   return <div className="min-h-screen bg-zinc-950 text-zinc-100 p-4 space-y-6">
     <h1 className="text-2xl font-bold">IPCams Lite Dashboard</h1>
@@ -35,6 +37,7 @@ export default function App() {
           <button onClick={()=>cameraAction(c.id,'record/start')} className="bg-red-700 px-2 py-1 rounded">Rec Start</button>
           <button onClick={()=>cameraAction(c.id,'record/stop')} className="bg-red-950 px-2 py-1 rounded">Rec Stop</button>
           <button onClick={async()=>{const r=await cameraAction(c.id,'screenshot'); if(r.downloadUrl) window.open(r.downloadUrl, '_blank');}} className="bg-indigo-700 px-2 py-1 rounded">Screenshot</button>
+          <button onClick={async()=>{const r=await cameraAction(c.id,'screenshot'); if(r.downloadUrl) window.open('http://localhost:4000'+r.downloadUrl,'_blank');}} className="bg-indigo-700 px-2 py-1 rounded">Screenshot</button>
           <button onClick={()=>deleteCamera(c.id)} className="bg-zinc-800 px-2 py-1 rounded">Delete</button>
         </div>
         <div className="flex gap-2">
@@ -50,6 +53,7 @@ export default function App() {
       <h2 className="font-semibold mb-2">Recordings</h2>
       {recordings.map((r)=><div key={r.id} className="flex gap-2 items-center mb-2">
         <video src={`/recordings/${r.filename}`} controls className="w-72" />
+        <video src={`http://localhost:4000/recordings/${r.filename}`} controls className="w-72" />
         <div className="text-sm">{r.filename}</div>
         <button onClick={async()=>{await deleteRecording(r.id); setRecordings(await fetchRecordings());}} className="bg-zinc-700 px-2 py-1 rounded">Delete</button>
       </div>)}

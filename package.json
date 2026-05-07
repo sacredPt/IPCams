@@ -10,5 +10,8 @@
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
+=======
+    "dev": "echo 'Run in two terminals: npm --prefix server run dev && npm --prefix client run dev'"
+
   }
 }
