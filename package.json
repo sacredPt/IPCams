@@ -1,0 +1,8 @@
+{
+  "name": "ipcams-lite-monorepo",
+  "private": true,
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "dev": "echo 'Run in two terminals: npm --prefix server run dev && npm --prefix client run dev'"
+  }
+}
